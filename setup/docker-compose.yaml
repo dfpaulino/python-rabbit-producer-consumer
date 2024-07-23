@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:7.0.4-rc0
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata6:/data/db
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: example
+
+
+
+  rabbit:
+    image: rabbitmq:3.12.10-management-alpine
+    hostname: mycompany.com
+    environment:
+        RABBITMQ_SSL_CERT_FILE: /ssl/servercert.pem 
+        RABBITMQ_SSL_KEY_FILE: /ssl/server-key.pem
+        RABBITMQ_SSL_CA_FILE: /ssl/ca-cert.pem
+    ports:
+      - '5672:5672'
+      - '5671:5671'
+      - '15672:15672'
+    volumes:
+      - ./rabbit/10-defaults.conf:/etc/rabbitmq/conf.d/10-defaults.conf
+      - ./rabbit/data:/var/lib/rabbitmq/
+      - ./rabbit/logs:/var/log/rabbitmq
+      - ./ssl2:/ssl
+
+volumes:
+  dbdata6:
+
+
